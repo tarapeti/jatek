@@ -2,29 +2,8 @@ import time
 import sys
 import os
 import getpass
-
-def main():
-
-    choice ='0'
-    while choice =='0':
-        print("Choose 1 of 3 choices\n")
-        print("1: Play")
-        print("2: Leaderboard")
-        print("3: Credits")
-        print("4: Quit")
-
-        choice = input ("\nPlease make a choice: ")
-
-        if choice == "4":
-            quit()
-        elif choice == "2":
-            leaderboard()
-        elif choice == "1":
-            game()
-        elif choice == "3":
-            credits()
-        else:
-            print("I don't understand your choice.")
+import random
+from collections import OrderedDict
 
 def back():
     try:
@@ -34,16 +13,13 @@ def back():
     except SyntaxError:
         pass
 
-def leaderboard():
-    score1, score2 = 0,0
-    with open('leaderboard.txt', 'r') as board:
-        full = board.read()
-        splitted = full.split(',')
-
-    print(splitted)
-
-    print(score1)
-    print(score2)
+def credits():
+    file = open('credits.txt', 'r')
+    lines = file.readlines()
+    for i in lines:
+        print(i)
+        time.sleep(1)
+    back()
 
 def game():
     os.system('clear')
@@ -58,10 +34,9 @@ def game():
     if name2 == '':
         name2 = 'Bázis'
 
-
     def snobli():
-    
-        amount = int(input('Hány érme/ fő legyen? '))
+        amount = random.randint(1,11)
+        print('A játékot fejenként {0} érmével játszátok'.format(amount))
         playerone = None
         playertwo = None
         oneguess = None
@@ -138,7 +113,7 @@ def game():
             print('{0} telibe találta!'.format(name1))
             table.write(name1 + ',')
             leaderboard.write(name1 + ',')
-
+    
         elif difference2 == 0 and difference1 != 0:
             print('{0} telibe találta!'.format(name2))
             table.write(name2 + ',')
@@ -199,6 +174,20 @@ def game():
     if bool(snobli()) == True:
         snobli()
 
+def leaderboard():
+    os.system('clear')
+    print('Leaderboard:\n')
+    board = open('leaderboard.txt', 'r')
+    full = board.read()
+    splitted = full.split(',')
+    lead = OrderedDict({x:splitted.count(x)for x in splitted})
+    lead_mod = dict(lead)
+    del lead_mod['']
+    lead_decr = sorted(lead_mod.items(), key=lambda t : t[1] , reverse=True)
+    for key, value in lead_decr:
+        print(key, value)
+    back()
+
 def quit():
     print("Quiting the game...")
     time.sleep(2)
@@ -207,18 +196,35 @@ def quit():
     os.system('clear')
     sys.exit()
 
-def credits():
-    file = open('credits.txt', 'r')
-    lines = file.readlines()
-    for i in lines:
-        print(i)
-        time.sleep(1)
-    back()
+def main():
 
+    choice ='0'
+    while choice =='0':
+        print("Choose one of the 4 choices\n")
+        print("1: Play")
+        print("2: Leaderboard")
+        print("3: Credits")
+        print("4: Quit")
+
+        choice = input ("\nPlease make a choice: ")
+
+        if choice == "4":
+            quit()
+        elif choice == "2":
+            leaderboard()
+        elif choice == "1":
+            game()
+        elif choice == "3":
+            credits()
+        else:
+            print("I don't understand your choice.")
 
 main()
 
-
-#kell play
-#kell emoji
-#clear
+ 
+#a játék nyelvének egységesítése             P
+#kinézet rendezése -- tesztelés              K
+#leaderboard kiírása szebben                 P
+#kód rendezése (functions egy helyen, stb)   K
+#random 3 és 5 között legyen                 P
+#prezentáció
