@@ -7,13 +7,14 @@ from collections import OrderedDict
 
 def back():
     try:
-        input("Press Enter to go back to main menu")
+        input("Press Enter to go back to the main menu!")
         os.system('clear')
         main()
     except SyntaxError:
         pass
 
 def credits():
+    os.system('clear')
     file = open('credits.txt', 'r')
     lines = file.readlines()
     for i in lines:
@@ -26,17 +27,17 @@ def game():
     text = open('snoblitext.txt', 'r')
     print(text.read())
 
-    name1 = input('Player 1 adj meg egy nevet: ')
+    name1 = input('Player 1 type in a nickname: ')
     if name1 == '':
         name1 = 'Diló'
 
-    name2 = input('Player 2 adj meg egy nevet: ')
+    name2 = input('Player 2 type in a nickname: ')
     if name2 == '':
         name2 = 'Bázis'
 
     def snobli():
-        amount = random.randint(1,11)
-        print('A játékot fejenként {0} érmével játszátok'.format(amount))
+        amount = random.randint(3,6)
+        print('You both have {0} coins to hide. '.format(amount))
         playerone = None
         playertwo = None
         oneguess = None
@@ -44,38 +45,38 @@ def game():
 
         print('\n')
 
-        # érmerejtés
+        # hiding the coins
         while playerone not in range(amount + 1):
             playerone = int(getpass.getpass(
-                '{0} add meg, hány érmét rejtesz el a {1}-ból: '.format(name1, amount)))
+                '{0}, decide how many coins you would like to hide out of {1}: '.format(name1, amount)))
 
             if playerone > amount:
                 print(
-                    '{0}, kérlek 1 és {1} között válassz!'.format(
-                        name1, str(amount)))
+                    '{0}, dont cheat u fkin bastard!'.format(
+                        name1))
 
         print('\n')
 
         while playertwo not in range(amount + 1):
             playertwo = int(getpass.getpass(
-                '{0} add meg, hány érmét rejtesz el a {1}-ból: '.format(name2, amount)))
+                '{0} decide how many coins you would like to hide out of {1}: '.format(name2, amount)))
 
             if playertwo > amount:
                 print(
-                    '{0}, kérlek 1 és {1} között válassz!'.format(
-                        name2, str(amount)))
+                    '{0}, can u not cheat?!'.format(
+                        name2))
 
         print('\n')
-        # tippelés
+        # guessing
 
         while oneguess not in range(amount * 2 + 1):
             oneguess = int(
                 input(
-                    '{0}, tippeld meg hány érme van játékban: '.format(name1)))
+                    '{0}, guess how many coins have been hidden: '.format(name1)))
 
             if oneguess > amount * 2:
                 print(
-                    '{0}, kérlek 1 és {1} között tippelj!'.format(
+                    '{0}, you can guess maximum {1}!'.format(
                         name1, amount * 2))
 
         print('\n')
@@ -83,18 +84,18 @@ def game():
         while twoguess not in range(amount * 2 + 1):
             twoguess = int(
                 input(
-                    '{0}, tippeld meg hány érme van játékban: '.format(name2)))
+                    '{0}, guess how many coins have been hidden: '.format(name2)))
 
             if twoguess > amount * 2:
                 print(
-                    '{0}, kérlek 1 és {1} között tippelj!'.format(
+                    '{0}, you can guess maximum {1}!'.format(
                         name2, amount * 2))
             else:
                 continue
 
         print('\n')
 
-        # végkimenetel
+        # outcome
 
         all = playerone + playertwo
         difference1 = abs(all - oneguess)
@@ -102,32 +103,32 @@ def game():
         table = open('table.txt', 'a')
         leaderboard = open('leaderboard.txt', 'a')
 
-        print('{0} {1} rejtett el'.format(name1, playerone))
-        print('{0} {1} rejtett el'.format(name2, playertwo))
+        print('{0} was hiding {1} coins.'.format(name1, playerone))
+        print('{0} was hiding {1} coins.'.format(name2, playertwo))
         print('\n')
 
         if difference1 == difference2:
-            print('Döntetlen')
+            print('Tie!')
 
         elif difference1 == 0 and difference2 != 0:
-            print('{0} telibe találta!'.format(name1))
+            print('{0} guessed it exactly right. Killed it!'.format(name1))
             table.write(name1 + ',')
             leaderboard.write(name1 + ',')
     
         elif difference2 == 0 and difference1 != 0:
-            print('{0} telibe találta!'.format(name2))
+            print('{0} guessed it exactly right. Killed it!'.format(name2))
             table.write(name2 + ',')
             leaderboard.write(name2 + ',')
 
 
         elif difference1 < difference2 and difference1 != 0:
-            print('{0} közelebb volt!'.format(name1))
+            print('{0} was closer!'.format(name1))
             table.write(name1 + ',')
             leaderboard.write(name1 + ',')
 
 
         elif difference2 < difference1 and difference2 != 0:
-            print('{0} közelebb volt!'.format(name2))
+            print('{0} was closer!'.format(name2))
             table.write(name2 + ',')
             leaderboard.write(name2 + ',')
 
@@ -149,11 +150,13 @@ def game():
                 elif kulon[i] == name2:
                     points2 += 1
 
-        print('{0} pontjai: {1}'.format(name1, points1))
-        print('{0} pontjai: {1}'.format(name2, points2))
+        print('{0}s points: {1}'.format(name1, points1))
+        print('{0}s points: {1}'.format(name2, points2))
+        print('\n')
 
         kovi = None
-        kovi = input('Szeretnétek még egyet játszani? [Y/N]')
+        kovi = input('Would you like to play another one? [Y/N]')
+        os.system('clear')
         status = None
 
         if kovi == 'y':
@@ -222,9 +225,6 @@ def main():
 main()
 
  
-#a játék nyelvének egységesítése             P
-#kinézet rendezése -- tesztelés              K
 #leaderboard kiírása szebben                 P
-#kód rendezése (functions egy helyen, stb)   K
-#random 3 és 5 között legyen                 P
 #prezentáció
+#credit zene??
