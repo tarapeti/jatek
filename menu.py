@@ -2,6 +2,8 @@ import time
 import sys
 import os
 import getpass
+import random
+from collections import OrderedDict
 
 def main():
 
@@ -35,15 +37,18 @@ def back():
         pass
 
 def leaderboard():
-    score1, score2 = 0,0
-    with open('leaderboard.txt', 'r') as board:
-        full = board.read()
-        splitted = full.split(',')
-
-    print(splitted)
-
-    print(score1)
-    print(score2)
+    os.system('clear')
+    print('Leaderboard:\n')
+    board = open('leaderboard.txt', 'r')
+    full = board.read()
+    splitted = full.split(',')
+    lead = OrderedDict({x:splitted.count(x)for x in splitted})
+    lead_mod = dict(lead)
+    del lead_mod['']
+    lead_decr = sorted(lead_mod.items(), key=lambda t : t[1] , reverse=True)
+    for key, value in lead_decr:
+        print(key, value)
+    back()
 
 def game():
     os.system('clear')
@@ -60,8 +65,8 @@ def game():
 
 
     def snobli():
-    
-        amount = int(input('Hány érme/ fő legyen? '))
+        amount = random.randint(1,11)
+        print('A játékot fejenként {0} érmével játszátok'.format(amount))
         playerone = None
         playertwo = None
         oneguess = None
@@ -138,7 +143,7 @@ def game():
             print('{0} telibe találta!'.format(name1))
             table.write(name1 + ',')
             leaderboard.write(name1 + ',')
-
+    
         elif difference2 == 0 and difference1 != 0:
             print('{0} telibe találta!'.format(name2))
             table.write(name2 + ',')
